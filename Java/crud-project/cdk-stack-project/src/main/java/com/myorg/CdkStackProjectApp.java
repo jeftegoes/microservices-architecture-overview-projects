@@ -7,8 +7,15 @@ public class CdkStackProjectApp {
         App app = new App();
 
         VpcStack vpcStack = new VpcStack(app, "vpc-stack-project");
+
         ClusterStack clusterStack = new ClusterStack(app, "cluster-stack-project", vpcStack.getVpc());
-        new ServiceStack(app, "service-stack-project", clusterStack.getCluster(), null, null);
+
+        RdsStack rdsStack = new RdsStack(app, "rds-stack-project", vpcStack.getVpc());
+        rdsStack.addStackDependency(vpcStack);
+
+        ServiceStack serviceStack = new ServiceStack(app, "service-stack-project", clusterStack.getCluster(), null, null);
+        serviceStack.addStackDependency(clusterStack);
+        serviceStack.addStackDependency(rdsStack);
 
         app.synth();
     }
