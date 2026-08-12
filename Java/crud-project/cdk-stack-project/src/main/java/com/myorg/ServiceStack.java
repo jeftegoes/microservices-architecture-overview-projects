@@ -72,6 +72,7 @@ public class ServiceStack extends Stack {
                                                 .build()
                                         )
                                 )
+                                .environment(envVariables)
                                 .build()
                 )
                 .publicLoadBalancer(true)

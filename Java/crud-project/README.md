@@ -1,1 +1,1 @@
-`cdk deploy --all --parameters rds-stack-project:databasepassword=${PASSWORD_HERE}`
+`cdk deploy --all --parameters rds-stack-project:databasepassword=master12345678`

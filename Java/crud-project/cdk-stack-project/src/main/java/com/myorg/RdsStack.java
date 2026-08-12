@@ -23,7 +23,7 @@ public class RdsStack extends Stack {
                 .build();
 
         ISecurityGroup iSecurityGroup = SecurityGroup.fromSecurityGroupId(this, id, vpc.getVpcDefaultSecurityGroup());
-        iSecurityGroup.addIngressRule(Peer.anyIpv4(), Port.tcp(3386));
+        iSecurityGroup.addIngressRule(Peer.anyIpv4(), Port.tcp(3306));
 
         DatabaseInstance databaseInstance = DatabaseInstance.Builder
                 .create(this, "rds-01")
