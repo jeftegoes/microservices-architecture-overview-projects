@@ -1,7 +1,9 @@
 package com.example.controllers;
 
+import com.example.enums.EventType;
 import com.example.models.Product;
 import com.example.repositories.ProductRepository;
+import com.example.services.ProductPublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +15,12 @@ import java.util.Optional;
 @RequestMapping("/api/products")
 public class ProductController {
     private ProductRepository productRepository;
+    private final ProductPublisherService productPublisherService;
 
     @Autowired
-    public ProductController(ProductRepository productRepository) {
+    public ProductController(ProductRepository productRepository, ProductPublisherService productPublisherService) {
         this.productRepository = productRepository;
+        this.productPublisherService = productPublisherService;
     }
 
     @GetMapping
@@ -39,6 +43,8 @@ public class ProductController {
             @RequestBody Product product) {
         Product productCreated = productRepository.save(product);
 
+        productPublisherService.publishProductEvent(productCreated, EventType.PRODUCT_CREATED, "dora");
+
         return new ResponseEntity<Product>(productCreated,
                 HttpStatus.CREATED);
     }
@@ -50,6 +56,8 @@ public class ProductController {
             product.setId(id);
 
             Product productUpdated = productRepository.save(product);
+
+            productPublisherService.publishProductEvent(productUpdated, EventType.PRODUCT_UPDATE, "sabrina");
 
             return new ResponseEntity<Product>(productUpdated,
                     HttpStatus.OK);
@@ -65,6 +73,8 @@ public class ProductController {
             Product product = optProduct.get();
 
             productRepository.delete(product);
+
+            productPublisherService.publishProductEvent(product, EventType.PRODUCT_DELETED, "lola");
 
             return new ResponseEntity<Product>(product, HttpStatus.OK);
         } else {

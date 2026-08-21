@@ -1,1 +1,7 @@
-`cdk deploy --all --parameters rds-stack-project:databasepassword=master12345678`
+- `cdk deploy --all --require-approval never --parameters rds-stack-project:databasepassword=master12345678`
+- `cdk destroy --all`
+- **To publish**
+  - `mvn clean package`
+  - `docker build . --tag back-end-project`
+  - `docker tag back-end-project jeftegoes/back-end-project-hub:1.0.0.`
+  - `docker push jeftegoes/back-end-project-hub:1.0.0.a`

@@ -13,9 +13,18 @@ public class CdkStackProjectApp {
         RdsStack rdsStack = new RdsStack(app, "rds-stack-project", vpcStack.getVpc());
         rdsStack.addStackDependency(vpcStack);
 
-        ServiceStack serviceStack = new ServiceStack(app, "service-stack-project", clusterStack.getCluster(), null, null);
+        SnsStack snsStack = new SnsStack(app, "sns-stack-project");
+
+        ServiceStack serviceStack = new ServiceStack(app,
+                "service-stack-project",
+                clusterStack.getCluster(),
+                null,
+                null,
+                snsStack.getProductEventsTopic());
+
         serviceStack.addStackDependency(clusterStack);
         serviceStack.addStackDependency(rdsStack);
+        serviceStack.addStackDependency(snsStack);
 
         app.synth();
     }
